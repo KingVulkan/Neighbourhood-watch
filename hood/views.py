@@ -6,6 +6,32 @@ from django.contrib.auth.decorators import login_required
 from .models import *
 # Create your views here.
 
+def signup(request):
+    if request.method == 'POST':
+        form = SignupForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.is_active = False
+            user.save()
+            current_site = get_current_site(request)
+            mail_subject = 'Activate your HoodWatch account.'
+            message = render_to_string('acc_active_email.html', {
+                'user': user,
+                'domain': current_site.domain,
+                'uid':urlsafe_base64_encode(force_bytes(user.pk)),
+                'token':account_activation_token.make_token(user),
+            })
+            to_email = form.cleaned_data.get('email')
+            email = EmailMessage(
+                        mail_subject, message, to=[to_email]
+            )
+            email.send()
+            return HttpResponse('Please confirm your email address to complete the registration')
+    else:
+        form = SignupForm()
+    return render(request, 'signup.html', {'form': form})
+
+
 def profile(request):
     date = dt.date.today()
     current_user = request.user
@@ -28,6 +54,20 @@ def edit_profile(request):
     return render(request, 'profile/edit_profile.html', {"date": date, "form":signup_form,"profile":profile})
 
 @login_required(login_url='/accounts/login/')
+def search_results(request):
+    if 'business' in request.GET and request.GET["business"]:
+        search_term = request.GET.get("business")
+        searched_businesses = Business.objects.filter(name=search_term)
+        message = f"{search_term}"
+        profiles=  Profile.objects.all( )
+      
+        return render(request, 'search.html',{"message":message,"business": searched_businesses,'profiles':profiles})
+
+    else:
+        message = "You haven't searched for any term"
+        return render(request, 'search.html',{"message":message})
+
+@login_required(login_url='/accounts/login/')
 def new_hood(request):
     current_user = request.user
     profile = Profile.objects.get(user=current_user)
@@ -46,7 +86,7 @@ def new_hood(request):
 def maps(request):
     date = dt.date.today()
     return render(request, 'maps.html',{"date":date})
-    
+
 
 @login_required(login_url='/accounts/login/')
 def hoods(request,id):
