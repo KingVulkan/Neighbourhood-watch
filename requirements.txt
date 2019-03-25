@@ -6,6 +6,8 @@ django-heroku==0.3.1
 django-location-field==2.0.3
 django-material==0.5.1
 django-registration==2.4.1
+django-tinymce==2.8.0
+djangorestframework==3.9.2
 gunicorn==19.9.0
 Pillow==5.3.0
 psycopg2==2.7.5

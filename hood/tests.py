@@ -5,7 +5,7 @@ from .models import *
 # Create your tests here.
 class UserTest(TestCase):
     def setUp(self):
-        self.user=User(username='manow',first_name='King',last_name='Kong',email='manowfelow@gmail.com')
+        self.user=User(username='manow',first_name='King',last_name='Vulkan',email='abuvulkan@gmail.com')
     
     def test_instance(self):
         self.assertTrue(isinstance(self.user,User))
@@ -13,8 +13,8 @@ class UserTest(TestCase):
     def test_data(self):
         self.assertTrue(self.user.username,"manow")
         self.assertTrue(self.user.first_name,"King")
-        self.assertTrue(self.user.last_name,'Kong')
-        self.assertTrue(self.user.email,'manowfelow@gmail.com')
+        self.assertTrue(self.user.last_name,'Vulkan')
+        self.assertTrue(self.user.email,'abuvulkan@gmail.com')
     
     def test_save(self):
         self.user.save()
