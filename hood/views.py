@@ -55,6 +55,13 @@ def activate(request, uidb64, token):
         return HttpResponse('Activation link is invalid!')
 
 
+# INDEX OF HOODWATCH
+def index(request):
+    date = dt.date.today()
+    hoods = Neighbourhood.objects.all()
+    return render(request, 'index.html',{"date":date, "hoods":hoods})
+
+
 def profile(request):
     date = dt.date.today()
     current_user = request.user
