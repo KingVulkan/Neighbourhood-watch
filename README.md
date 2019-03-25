@@ -29,8 +29,8 @@ The user should be able to:
 
 To install, follow the following instructions;
 ```
-    $ git clone https://github.com/KingVulkan/HoodWatch.git
-    $ cd HoodWatch
+    $ git clone https://github.com/KingVulkan/Neighbourhood-Watch.git
+    $ cd Neighbourhood-Watch
     $ source virtual/bin/activate
     Install all the necessary requirements by running pip install -r requirements.txt (Python 3.6).
     $ ./manager.py runserver
