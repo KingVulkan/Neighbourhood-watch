@@ -27,6 +27,26 @@ def edit_profile(request):
         
     return render(request, 'profile/edit_profile.html', {"date": date, "form":signup_form,"profile":profile})
 
+@login_required(login_url='/accounts/login/')
+def new_hood(request):
+    current_user = request.user
+    profile = Profile.objects.get(user=current_user)
+    if request.method == 'POST':
+        form = HoodForm(request.POST, request.FILES)
+        if form.is_valid():
+            hood = form.save(commit=False)
+            hood.user = current_user
+            hood.profile = profile
+            hood.save()
+        return redirect('index')
+    else:
+        form = HoodForm()
+    return render(request, 'new_hood.html', {"form": form})
+
+def maps(request):
+    date = dt.date.today()
+    return render(request, 'maps.html',{"date":date})
+    
 
 @login_required(login_url='/accounts/login/')
 def hoods(request,id):
@@ -71,19 +91,3 @@ def post_new(request,id):
         form = PostForm()
         return render(request,'new_post.html',{"form":form,"posts":posts,"hood":hood,  "date":date})
 
-def post_business(request,id):
-    date = dt.date.today()
-    hood=Neighbourhood.objects.get(id=id)
-    business = Business.objects.filter(neighbourhood=hood)
-    form = BusinessForm()
-    if request.method == 'POST':
-        form = BusinessForm(request.POST, request.FILES)
-        if form.is_valid():
-            business = form.save(commit=False)
-            business.profile = request.user.profile
-            business.neighbourhood = hood
-            business.save()
-            return redirect('index')
-    else:
-        form = BusinessForm()
-        return render(request,'new_business.html',{"form":form,"business":business,"hood":hood,  "date":date})
