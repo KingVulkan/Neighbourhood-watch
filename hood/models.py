@@ -3,6 +3,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.core.validators import MinValueValidator,MaxValueValidator
 
 # Create your models here.
 class Profile(models.Model):
@@ -62,3 +63,15 @@ class Post(models.Model):
     user = models.ForeignKey(Profile, related_name='profile')
     post = models.CharField(max_length=30)
     neighbourhood = models.ForeignKey(Neighbourhood, related_name='posts')
+
+class Location(models.Model):
+    name = models.CharField(max_length=30)
+
+    def save_location(self):
+        self.save()
+
+    def delete_location(self):
+        self.delete()
+
+    def __str__(self):
+        return self.name
